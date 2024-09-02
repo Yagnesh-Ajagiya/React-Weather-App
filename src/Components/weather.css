@@ -115,6 +115,12 @@ button{
     gap: 5px;
 }
 
+.cityName{
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
 
 @media screen and (max-width: 900px) {
     .input-container {

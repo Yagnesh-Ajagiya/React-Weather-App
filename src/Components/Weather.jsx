@@ -20,18 +20,25 @@ export default function Weather() {
 
     const handleCityChange = (event) => {
         setCity(event.target.value);
+        setError(''); // Clear the error message when typing starts
     };
 
     const fetchWeather = async () => {
         setLoading(true);
-        setError('');
+        setError(''); // Clear any previous error
+
         try {
             const response = await axios.get(
                 `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=763ca7fa30c677c83e7f122aa7aa5387`
             );
             setWeatherInfo(response);
         } catch (error) {
-            setError(error.response.data.message);
+            if (error.response) {
+                setError(error.response.data.message);
+            } else {
+                setError('An unexpected error occurred.');
+            }
+            setWeatherInfo(null); // Clear previous weather info on error
         } finally {
             setLoading(false);
         }
@@ -77,9 +84,11 @@ export default function Weather() {
                             <p>{weatherInfo.data.weather[0].description}</p>
                         </div>
                     </div>
-                ) : (
-                    <div className="error-message">{error}</div>
-                )}
+                ) : error ? (
+                    <div className="error-message">
+                        <span className='cityName'>{city}</span> {error}
+                    </div>
+                ) : null}
             </div>
         </div>
     );
